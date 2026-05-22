@@ -3,6 +3,8 @@ import { config } from "dotenv";
 import express, { json } from "express";
 import { connect } from "mongoose";
 
+import authRoutes from "./routes/authRoutes.js";
+
 config();
 const app = express();
 
@@ -17,9 +19,7 @@ app.get("/", (req, res) => {
 	res.send("<h1>Welcome to MongoDB Backend Starter Point!</h1>");
 });
 
-app.get("/api", (req, res) => {
-	res.json({ message: "Project Setup - Expense Tracker API" });
-});
+app.use("/api", authRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
