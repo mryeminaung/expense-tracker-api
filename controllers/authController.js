@@ -18,6 +18,7 @@ export async function register(req, res) {
 			await newUser.save();
 			res.json({ message: "Registered successful!", data: newUser });
 		}
+		
 	} catch (err) {
 		res.status(500).json({ message: "Server Error", message: err.message });
 	}

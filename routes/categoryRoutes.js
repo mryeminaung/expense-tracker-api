@@ -10,10 +10,12 @@ import { protectRoute } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("", protectRoute, getAllCategories);
-router.post("", protectRoute, createCategory);
-router.put("/:id", protectRoute, updateCategoryById);
-router.delete("/:id", protectRoute, deleteCategoryById);
-router.get("/summary", protectRoute, getCategorySummary);
+router.use(protectRoute);
+
+router.get("", getAllCategories);
+router.post("", createCategory);
+router.get("/summary", getCategorySummary);
+router.put("/:id", updateCategoryById);
+router.delete("/:id", deleteCategoryById);
 
 export default router;
