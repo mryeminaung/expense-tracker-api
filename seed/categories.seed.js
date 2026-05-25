@@ -13,7 +13,7 @@ const categories = [
 
 config();
 
-const seedCategories = async () => {
+export const seedCategories = async () => {
 	await connectDB();
 
 	try {
@@ -35,5 +35,3 @@ const seedCategories = async () => {
 		process.exit(1);
 	}
 };
-
-seedCategories();

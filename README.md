@@ -11,6 +11,10 @@ This project is created for learning and practicing:
 - Aggregation & analytics
 - Real-world backend workflows
 
+## Status
+
+Currently in early development phase.
+
 ## Features (MVP)
 
 ### Authentication
@@ -101,6 +105,81 @@ src/
 - Docker support
 - Unit testing
 
-## Status
+## Local Setup (Run locally)
 
-Currently in early development phase.
+Follow these steps to run the API locally for development.
+
+Prerequisites
+
+- Node.js (v16+ recommended)
+- MongoDB (local or Atlas)
+
+0. Clone the repository
+
+```bash
+git clone https://github.com/mryeminaung/expense-tracker-api.git
+cd expense-tracker-api
+```
+
+1. Install dependencies
+
+```bash
+npm install
+```
+
+2. Create a `.env` file in the project root with these values:
+
+```
+MONGO_URI=mongodb://localhost:27017/expense-tracker
+JWT_SECRET=your_jwt_secret_here
+PORT=5000
+```
+
+3. (Optional) Seed example data
+
+You can run the project's seeder script which populates example data (categories, etc.):
+
+```bash
+# via npm script
+npm run seed
+
+# or run the seeder directly
+node seed/database.seed.js
+```
+
+4. Start the dev server
+
+```bash
+npm run dev
+```
+
+## Response format
+
+All endpoints use a consistent JSON structure:
+
+Success example:
+
+```json
+{
+	"success": true,
+	"message": "Registered successful!",
+	"data": {
+		/* object or array */
+	}
+}
+```
+
+Error example:
+
+```json
+{
+	"success": false,
+	"message": "Validation failed",
+	"errors": [{ "field": "name", "message": "Name is required" }]
+}
+```
+
+Notes
+
+- If you use MongoDB Atlas, set `MONGO_URI` to the connection string.
+- Keep `JWT_SECRET` safe — it's used to sign authentication tokens.
