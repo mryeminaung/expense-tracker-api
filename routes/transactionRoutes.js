@@ -3,23 +3,23 @@ import {
 	createTransaction,
 	deleteTransaction,
 	getAllTransactions,
+	getLatestTransactions,
 	getTransaction,
 	getTransactionsSummary,
 	updateTransaction,
-  getLatestTransactions,
 } from "../controllers/transactionController.js";
 import { protectRoute } from "../middleware/authMiddleware.js";
 
-const router = express.Router();
+const transactionRouter = express.Router();
 
-router.use(protectRoute);
+transactionRouter.use(protectRoute);
 
-router.get("/", getAllTransactions);
-router.post("/", createTransaction);
-router.get("/sumary", getTransactionsSummary);
-router.get("/latest", getLatestTransactions);
-router.get("/:id", getTransaction);
-router.put("/:id", updateTransaction);
-router.delete("/:id", deleteTransaction);
+transactionRouter.get("/", getAllTransactions);
+transactionRouter.post("/", createTransaction);
+transactionRouter.get("/sumary", getTransactionsSummary);
+transactionRouter.get("/latest", getLatestTransactions);
+transactionRouter.get("/:id", getTransaction);
+transactionRouter.put("/:id", updateTransaction);
+transactionRouter.delete("/:id", deleteTransaction);
 
-export default router;
+export default transactionRouter;

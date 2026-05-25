@@ -1,13 +1,12 @@
 import Category from "../models/Category.js";
+import { errorResponse, successResponse } from "../utils/apiResponse.js";
 
 export async function getAllCategories(req, res) {
 	try {
 		const allCategories = await Category.find({}, { name: 1, type: 1 });
-		res.json({ message: "All categories", data: allCategories });
+		return successResponse(res, allCategories, "All categories");
 	} catch (error) {
-		res
-			.status(500)
-			.json({ message: "Error fetching categories", error: error.message });
+		return errorResponse(res, error.message, "Error fetching categories", 500);
 	}
 }
 
@@ -17,11 +16,9 @@ export async function createCategory(req, res) {
 
 		const newCategory = new Category({ name, type });
 		await newCategory.save();
-		res.status(201).json({ message: "Category created", data: newCategory });
+		return successResponse(res, newCategory, "Category created", 201);
 	} catch (error) {
-		res
-			.status(500)
-			.json({ message: "Error creating category", error: error.message });
+		return errorResponse(res, error.message, "Error creating category", 500);
 	}
 }
 
@@ -35,13 +32,11 @@ export async function updateCategoryById(req, res) {
 			{ returnDocument: "after" },
 		);
 		if (!updatedCategory) {
-			return res.status(404).json({ message: "Category not found" });
+			return errorResponse(res, null, "Category not found", 404);
 		}
-		res.json({ message: "Category updated", data: updatedCategory });
+		return successResponse(res, updatedCategory, "Category updated");
 	} catch (error) {
-		res
-			.status(500)
-			.json({ message: "Error updating category", error: error.message });
+		return errorResponse(res, error.message, "Error updating category", 500);
 	}
 }
 
@@ -50,15 +45,16 @@ export async function deleteCategoryById(req, res) {
 		const { id } = req.params;
 		const deletedCategory = await Category.findByIdAndDelete(id);
 		if (!deletedCategory) {
-			return res
-				.status(404)
-				.json({ message: "Already deleted or does not exist!" });
+			return errorResponse(
+				res,
+				null,
+				"Already deleted or does not exist!",
+				404,
+			);
 		}
-		res.json({ message: "Category deleted", data: deletedCategory });
+		return successResponse(res, deletedCategory, "Category deleted");
 	} catch (error) {
-		res
-			.status(500)
-			.json({ message: "Error deleting category", error: error.message });
+		return errorResponse(res, error.message, "Error deleting category", 500);
 	}
 }
 
@@ -79,11 +75,13 @@ export async function getCategorySummary(req, res) {
 				},
 			},
 		]);
-		res.json({ message: "Category summary", data: aggregatedResults });
+		return successResponse(res, aggregatedResults, "Category summary");
 	} catch (error) {
-		res.status(500).json({
-			message: "Error fetching category summary",
-			error: error.message,
-		});
+		return errorResponse(
+			res,
+			error.message,
+			"Error fetching category summary",
+			500,
+		);
 	}
 }

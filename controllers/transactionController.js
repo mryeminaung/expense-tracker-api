@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Transaction from "../models/Transaction.js";
+import { errorResponse, successResponse } from "../utils/apiResponse.js";
 
 export async function getAllTransactions(req, res) {
 	try {
@@ -10,12 +11,13 @@ export async function getAllTransactions(req, res) {
 				{ path: "user", select: "name email" },
 			],
 		);
-		res.json({
-			message: "Transactions fetched successfully!",
-			data: transactions,
-		});
+		return successResponse(
+			res,
+			transactions,
+			"Transactions fetched successfully!",
+		);
 	} catch (error) {
-		res.status(500).json({ message: "Server Error", error: error.message });
+		return errorResponse(res, error.message, "Server Error", 500);
 	}
 }
 
@@ -33,12 +35,14 @@ export async function createTransaction(req, res) {
 		});
 		await newTransaction.save();
 
-		res.json({
-			message: "Transaction created successfully!",
-			data: newTransaction,
-		});
+		return successResponse(
+			res,
+			newTransaction,
+			"Transaction created successfully!",
+			201,
+		);
 	} catch (error) {
-		res.status(500).json({ message: "Server Error", error: error.message });
+		return errorResponse(res, error.message, "Server Error", 500);
 	}
 }
 
@@ -48,12 +52,13 @@ export async function getLatestTransactions(req, res) {
 			.sort({ createdAt: -1 })
 			.limit(5)
 			.populate([{ path: "category", select: "name type" }]);
-		res.json({
-			message: "Latest transactions fetched successfully!",
-			data: transactions,
-		});
+		return successResponse(
+			res,
+			transactions,
+			"Latest transactions fetched successfully!",
+		);
 	} catch (error) {
-		res.status(500).json({ message: "Server Error", error: error.message });
+		return errorResponse(res, error.message, "Server Error", 500);
 	}
 }
 
@@ -203,12 +208,13 @@ export async function getTransactionsSummary(req, res) {
 			monthlySummary: result.monthlySummary || [],
 		};
 
-		res.json({
-			message: "Transaction summary fetched successfully!",
-			data: finalResponse,
-		});
+		return successResponse(
+			res,
+			finalResponse,
+			"Transaction summary fetched successfully!",
+		);
 	} catch (error) {
-		res.status(500).json({ message: "Server Error", error: error.message });
+		return errorResponse(res, error.message, "Server Error", 500);
 	}
 }
 
@@ -220,14 +226,15 @@ export async function getTransaction(req, res) {
 			{ path: "user", select: "name email" },
 		]);
 		if (!transaction) {
-			return res.status(404).json({ message: "Transaction not found" });
+			return errorResponse(res, null, "Transaction not found", 404);
 		}
-		res.json({
-			message: "Transaction fetched successfully!",
-			data: transaction,
-		});
+		return successResponse(
+			res,
+			transaction,
+			"Transaction fetched successfully!",
+		);
 	} catch (error) {
-		res.status(500).json({ message: "Server Error", error: error.message });
+		return errorResponse(res, error.message, "Server Error", 500);
 	}
 }
 
@@ -242,14 +249,15 @@ export async function updateTransaction(req, res) {
 			{ returnDocument: "after" },
 		);
 		if (!updatedTransaction) {
-			return res.status(404).json({ message: "Transaction not found" });
+			return errorResponse(res, null, "Transaction not found", 404);
 		}
-		res.json({
-			message: "Transaction updated successfully!",
-			data: updatedTransaction,
-		});
+		return successResponse(
+			res,
+			updatedTransaction,
+			"Transaction updated successfully!",
+		);
 	} catch (error) {
-		res.status(500).json({ message: "Server Error", error: error.message });
+		return errorResponse(res, error.message, "Server Error", 500);
 	}
 }
 
@@ -258,13 +266,14 @@ export async function deleteTransaction(req, res) {
 		const { id } = req.params;
 		const deletedTransaction = await Transaction.findByIdAndDelete(id);
 		if (!deletedTransaction) {
-			return res.status(404).json({ message: "Transaction not found" });
+			return errorResponse(res, null, "Transaction not found", 404);
 		}
-		res.json({
-			message: "Transaction deleted successfully!",
-			data: deletedTransaction,
-		});
+		return successResponse(
+			res,
+			deletedTransaction,
+			"Transaction deleted successfully!",
+		);
 	} catch (error) {
-		res.status(500).json({ message: "Server Error", error: error.message });
+		return errorResponse(res, error.message, "Server Error", 500);
 	}
 }
