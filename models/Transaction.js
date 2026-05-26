@@ -4,15 +4,16 @@ const transactionSchema = new mongoose.Schema(
 	{
 		title: {
 			type: String,
-			required: true,
+			required: [true, "Title is required"],
 			trim: true,
 		},
 		amount: {
 			type: Number,
-			required: true,
+			required: [true, "Amount is required"],
 		},
 		note: {
 			type: String,
+			trim: true,
 		},
 		date: {
 			type: Date,

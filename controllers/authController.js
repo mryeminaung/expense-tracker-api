@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import { seedDefaultCategories } from "../seed/categories.seed.js";
 import { errorResponse, successResponse } from "../utils/apiResponse.js";
 
 export async function register(req, res) {
@@ -17,6 +18,7 @@ export async function register(req, res) {
 		if (hashPassword) {
 			const newUser = new User({ name, email, password: hashPassword });
 			await newUser.save();
+			await seedDefaultCategories(newUser._id);
 			return successResponse(res, newUser, "Registered successful!", 201);
 		}
 	} catch (err) {
@@ -51,3 +53,12 @@ export const login = async (req, res) => {
 		return errorResponse(res, error.message, "Server Error", 500);
 	}
 };
+
+// don't need to implement logout in backend when using JWT. The client should simply delete the token on logout.
+// export const logout = async (req, res) => {
+// 	try {
+// 		return successResponse(res, null, "Logout successful!", 200);
+// 	} catch (error) {
+// 		return errorResponse(res, error.message, "Server Error", 500);
+// 	}
+// };
