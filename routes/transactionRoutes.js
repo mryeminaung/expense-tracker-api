@@ -27,7 +27,7 @@ transactionRouter.post(
 	validate(createTransactionSchema),
 	createTransaction,
 );
-transactionRouter.get("/sumary", getTransactionsSummary);
+transactionRouter.get("/summary", getTransactionsSummary);
 transactionRouter.get("/latest", getLatestTransactions);
 transactionRouter.get("/:id", validate(getTransactionSchema), getTransaction);
 transactionRouter.put(
